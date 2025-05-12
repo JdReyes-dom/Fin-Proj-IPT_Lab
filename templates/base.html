@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Voting System - {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .logout-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .logout-modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="{{ url_for('dashboard') }}">Online Voting System\Home</a>
+            <div class="nav-links">
+                {% if 'user_id' in session %}
+                    <div class="profile-dropdown">
+                        <button class="profile-btn">
+                            <i class="fas fa-user-circle"></i>
+                            {{ session['username'] }}
+                            <i class="fas fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="{{ url_for('profile') }}"><i class="fas fa-user"></i> My Profile</a>
+                            {% if session.get('is_admin') %}
+                                <a href="{{ url_for('admin') }}"><i class="fas fa-cog"></i> Admin Panel</a>
+                            {% endif %}
+                            <a href="{{ url_for('results') }}"><i class="fas fa-chart-bar"></i> Results</a>
+                            <a href="#" class="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <a href="{{ url_for('login') }}">Login</a>
+                    <a href="{{ url_for('register') }}">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Logout Confirmation Modal - Initially hidden -->
+    <div id="logout-modal" class="logout-modal" style="display: none;">
+        <div class="logout-modal-content">
+            <h3>Confirm Logout</h3>
+            <p>Are you sure you want to logout?</p>
+            <div class="modal-buttons">
+                <button id="cancel-logout" class="btn">Cancel</button>
+                <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <script>
+        // Only run this code if we're on a page with a logout link
+        document.addEventListener('DOMContentLoaded', function() {
+            const logoutLinks = document.querySelectorAll('.logout-link');
+            const logoutModal = document.getElementById('logout-modal');
+            const cancelLogout = document.getElementById('cancel-logout');
+
+            if (logoutLinks.length > 0 && logoutModal && cancelLogout) {
+                // Add click handler to all logout links
+                logoutLinks.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        logoutModal.style.display = 'flex';
+                    });
+                });
+
+                // Cancel button handler
+                cancelLogout.addEventListener('click', function() {
+                    logoutModal.style.display = 'none';
+                });
+
+                // Close modal when clicking outside
+                logoutModal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.style.display = 'none';
+                    }
+                });
+
+                // Prevent dropdown from closing when clicking inside modal
+                document.querySelector('.logout-modal-content').addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            }
+
+            // Profile dropdown toggle
+            const profileBtn = document.querySelector('.profile-btn');
+            if (profileBtn) {
+                profileBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    document.querySelector('.dropdown-content').classList.toggle('show');
+                });
+            }
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function() {
+                const dropdown = document.querySelector('.dropdown-content');
+                if (dropdown && dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

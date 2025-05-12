@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Voting Results{% endblock %}
+
+{% block content %}
+    <div class="admin-results">
+        <h1>Voting Results (Admin View)</h1>
+        
+        {% for category, data in results_by_category.items() %}
+            <div class="category-results">
+                <h2>{{ category[1] }}</h2>
+                <p>Total votes: {{ data.total_votes }}</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Candidate</th>
+                            <th>Party</th>
+                            <th>Votes</th>
+                            <th>Percentage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for candidate in data.candidates %}
+                            <tr>
+                                <td>{{ candidate[0] }}</td>
+                                <td>{{ candidate[1] }}</td>
+                                <td>{{ candidate[2] }}</td>
+                                <td>
+                                    {% if data.total_votes > 0 %}
+                                        {{ (candidate[2] / data.total_votes * 100)|round(1) }}%
+                                    {% else %}
+                                        0%
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endfor %}
+        
+        <div class="admin-actions">
+            <a href="{{ url_for('admin') }}" class="btn">
+                <i class="fas fa-arrow-left"></i> Back to Admin Panel
+            </a>
+        </div>
+    </div>
+{% endblock %}
