@@ -14,7 +14,7 @@ Karl Mendoza - c23-2495-279:
 Instructions:
 1. Open Visual Studio Code
 2. Download all the files
-3. Put it inside a folder named online_voting_system
+3. Put it inside a folder named online_voting_system. Unzip the venv.zip.
 4. In VS Code, open the folder
 5. Open the VS Code terminal
 6. Type pip install -r requirements.txt, wait for it to install
