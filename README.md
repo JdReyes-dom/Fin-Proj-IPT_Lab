@@ -2,7 +2,7 @@ Project Title:
 PyVote
 
 Purpose:
-The purpose of our project is to establish an online voting system that prioritizes authentication as well as simplicity for the users. Our project uses a registration and login method to verify voters. Our project also utilizes Flask so that our project can become a web based application. The project also has administration functions to manage the voting system wherein the admin can add\delete candidates, categories, or delete voters as well as to reset the votes made by the users.
+The purpose of our project is to establish an online voting system that prioritizes authentication as well as simplicity for the users. Our project uses a registration and login method to verify voters. Our project also utilizes Flask so that our project can become a web based application. The project also has administration functions to manage the voting system wherein the admin can add\delete candidates, categories, or delete voters as well as to reset the votes made by the users (note: admin username: admin, password: admin).
 
 Members:
 Jherwin Reyes - c23-1954-732:
